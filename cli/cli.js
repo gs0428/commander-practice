@@ -42,7 +42,7 @@ const add = new Command()
     if (dependencies?.length) {
       // execa 라이브러리를 이용하여
       // 해당 컴포넌트의 의존성 설치
-      await execa("pnpm", ["add", "-D", ...dependencies], cwd);
+      await execa("pnpm", ["add", ...dependencies], cwd);
     }
 
     if (devDependencies?.length) {
