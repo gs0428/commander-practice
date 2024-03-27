@@ -1,8 +1,7 @@
 import { existsSync, promises as fs } from "fs";
 import path from "path";
-import { program } from "commander";
+import { program, Command } from "commander";
 import { getRegistry } from "./utils/registry.js";
-import { Command } from "commander";
 import { execa } from "execa";
 
 const add = new Command()
@@ -18,7 +17,7 @@ const add = new Command()
 
     if (!newComponent) throw new Error(`There is no '${component}' component. Please check and retry.`);
 
-    const { name, dependencies, files, type } = newComponent;
+    const { name, dependencies, devDependencies, files, type } = newComponent;
     const [parentFolder, childFolder] = type.split(":");
     const targetDir = path.resolve(cwd, parentFolder, childFolder);
 
@@ -44,6 +43,12 @@ const add = new Command()
       // execa 라이브러리를 이용하여
       // 해당 컴포넌트의 의존성 설치
       await execa("pnpm", ["add", "-D", ...dependencies], cwd);
+    }
+
+    if (devDependencies?.length) {
+      // execa 라이브러리를 이용하여
+      // 해당 컴포넌트의 의존성 설치
+      await execa("pnpm", ["add", "-D", ...devDependencies], cwd);
     }
   });
 
