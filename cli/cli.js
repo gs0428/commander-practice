@@ -8,8 +8,11 @@ const add = new Command()
   .name("add")
   .description("add new component")
   .argument("<component>")
-  .action(async (component) => {
+  .option("-c, --cwd [cwd]", "chose directory where you want to install. default is current working directory.", process.cwd())
+  .action(async (component, option) => {
     const cwd = process.cwd();
+
+    if (!existsSync(option.cwd)) throw new Error(`There is no '${cwd}'. Please check and try again.`);
 
     // 존재하는 컴포넌트라면 json 형식의 데이터를 반환
     // 존재하지 않는 컴포넌트라면 false를 반환
