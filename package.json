@@ -12,7 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "commander": "^12.0.0",
-    "execa": "^8.0.1"
+    "execa": "^8.0.1",
+    "ora": "^8.0.1"
   },
   "devDependencies": {
     "vitest": "^1.4.0"
