@@ -3,6 +3,7 @@ import path from "path";
 import { program, Command } from "commander";
 import { getRegistry } from "./utils/registry.js";
 import { execa } from "execa";
+import ora from "ora";
 
 const add = new Command()
   .name("add")
@@ -19,6 +20,8 @@ const add = new Command()
     const newComponent = await getRegistry(component);
 
     if (!newComponent) throw new Error(`There is no '${component}' component. Please check and retry.`);
+
+    const spinner = ora(`Installing ${component}...`).start();
 
     const { name, dependencies, devDependencies, files, type } = newComponent;
     const [parentFolder, childFolder] = type.split(":");
@@ -53,6 +56,8 @@ const add = new Command()
       // 해당 컴포넌트의 의존성 설치
       await execa("pnpm", ["add", "-D", ...devDependencies], cwd);
     }
+
+    spinner.succeed("Done");
   });
 
 program.addCommand(add).parse();
