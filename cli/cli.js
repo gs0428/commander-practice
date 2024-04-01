@@ -1,7 +1,7 @@
 import { existsSync, promises as fs } from "fs";
 import path from "path";
 import { program, Command } from "commander";
-import { getAllRegistries, getRegistry } from "./utils/registry.js";
+import { getAllRegistries, getRegistries } from "./utils/registry.js";
 import { execa } from "execa";
 import ora from "ora";
 import { checkbox } from "@inquirer/prompts";
@@ -20,6 +20,16 @@ const add = new Command()
     const allRegistries = await getAllRegistries();
 
     let selectedComponents = option.all ? allRegistries.map((registry) => registry.name) : components;
+
+    if (!components.length && !option.all) {
+      const componentList = await checkbox({
+        message: "select components",
+        choices: allRegistries.map((registry) => ({ name: registry.name, value: registry.name })),
+      });
+      selectedComponents = componentList;
+    }
+
+    const fetchedComponents = await getRegistries(selectedComponents);
 
     // const spinner = ora(`Installing ${component}...`).start();
 

@@ -1,11 +1,22 @@
 export const getAllRegistries = async () => {
-  const response = await fetch("https://ui.shadcn.com/registry/index.json");
-  return response.json();
+  try {
+    const response = await fetch("https://ui.shadcn.com/registry/index.json");
+    return response.json();
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-export const getRegistry = async (name) => {
-  const response = await fetch(`https://ui.shadcn.com/registry/styles/default/${name}.json`);
-  if (response.status === 404) return null;
-
-  return response.json();
+export const getRegistries = async (components) => {
+  try {
+    const response = await Promise.all(
+      components.map(async (component) => {
+        const fetchedComponent = await fetch(`https://ui.shadcn.com/registry/styles/default/${component}.json`);
+        return await fetchedComponent.json();
+      })
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
 };
