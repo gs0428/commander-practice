@@ -31,43 +31,46 @@ const add = new Command()
 
     const fetchedComponents = await getRegistries(selectedComponents);
 
-    // const spinner = ora(`Installing ${component}...`).start();
+    const spinner = ora(`Installing...`).start();
 
-    // const { name, dependencies, devDependencies, files, type } = newComponent;
-    // const [parentFolder, childFolder] = type.split(":");
-    // const targetDir = path.resolve(cwd, parentFolder, childFolder);
+    for (const fetchedComponent of fetchedComponents) {
+      spinner.text = `Installing ${fetchedComponent.name}...`;
+      const { name, dependencies, devDependencies, files, type } = fetchedComponent;
+      const [parentFolder, childFolder] = type.split(":");
+      const targetDir = path.resolve(cwd, parentFolder, childFolder);
 
-    // if (!existsSync(targetDir)) {
-    //   // targetDir이 존재하지 않는다면
-    //   // 상위 디렉토리와 함께 폴더 생성
-    //   // { recursive: true }가 상위 디렉토리를 생성 해줌
-    //   await fs.mkdir(targetDir, { recursive: true });
-    // }
+      if (!existsSync(targetDir)) {
+        // targetDir이 존재하지 않는다면
+        // 상위 디렉토리와 함께 폴더 생성
+        // { recursive: true }가 상위 디렉토리를 생성 해줌
+        await fs.mkdir(targetDir, { recursive: true });
+      }
 
-    // for (const file of files) {
-    //   const filePath = path.resolve(targetDir, file.name);
+      for (const file of files) {
+        const filePath = path.resolve(targetDir, file.name);
 
-    //   if (existsSync(filePath)) {
-    //     console.log(`\n${name} is component already exist.`);
-    //     continue;
-    //   }
+        if (existsSync(filePath)) {
+          console.log(`\n${name} is component already exist.`);
+          continue;
+        }
 
-    //   await fs.writeFile(filePath, file.content);
-    // }
+        await fs.writeFile(filePath, file.content);
+      }
 
-    // if (dependencies?.length) {
-    //   // execa 라이브러리를 이용하여
-    //   // 해당 컴포넌트의 의존성 설치
-    //   await execa("pnpm", ["add", ...dependencies], cwd);
-    // }
+      if (dependencies?.length) {
+        // execa 라이브러리를 이용하여
+        // 해당 컴포넌트의 의존성 설치
+        await execa("pnpm", ["add", ...dependencies], cwd);
+      }
 
-    // if (devDependencies?.length) {
-    //   // execa 라이브러리를 이용하여
-    //   // 해당 컴포넌트의 의존성 설치
-    //   await execa("pnpm", ["add", "-D", ...devDependencies], cwd);
-    // }
+      if (devDependencies?.length) {
+        // execa 라이브러리를 이용하여
+        // 해당 컴포넌트의 의존성 설치
+        await execa("pnpm", ["add", "-D", ...devDependencies], cwd);
+      }
+    }
 
-    // spinner.succeed("Done");
+    spinner.succeed("Done");
   });
 
 program.addCommand(add).parse();
