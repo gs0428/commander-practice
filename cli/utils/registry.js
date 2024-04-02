@@ -3,7 +3,7 @@ export const getAllRegistries = async () => {
     const response = await fetch("https://ui.shadcn.com/registry/index.json");
     return response.json();
   } catch (error) {
-    console.log(error);
+    throw new Error("Something went wrong. Please check the network status.");
   }
 };
 
@@ -17,6 +17,6 @@ export const getRegistries = async (components) => {
     );
     return response;
   } catch (error) {
-    console.log(error);
+    throw new Error("Please check the components and try again.");
   }
 };
