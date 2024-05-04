@@ -1,12 +1,12 @@
 import { existsSync, promises as fs } from "fs";
 import path from "path";
-import { program, Command } from "commander";
-import { getAllRegistries, getRegistries } from "./utils/registry.js";
+import { Command } from "commander";
+import { getAllRegistries, getRegistries } from "../utils/registry.js";
 import { execa } from "execa";
 import ora from "ora";
 import { checkbox } from "@inquirer/prompts";
 
-const add = new Command()
+export const add = new Command()
   .name("add")
   .description("add new component")
   .argument("[components...]")
@@ -72,5 +72,3 @@ const add = new Command()
 
     spinner.succeed("Done");
   });
-
-program.addCommand(add).parse();
