@@ -17,6 +17,9 @@ dependencies:
   ora:
     specifier: ^8.0.1
     version: 8.0.1
+  zod:
+    specifier: ^3.23.6
+    version: 3.23.6
 
 devDependencies:
   vitest:
@@ -1289,3 +1292,7 @@ packages:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
     dev: true
+
+  /zod@3.23.6:
+    resolution: {integrity: sha512-RTHJlZhsRbuA8Hmp/iNL7jnfc4nZishjsanDAfEY1QpDQZCahUp3xDzl+zfweE9BklxMUcgBgS1b7Lvie/ZVwA==}
+    dev: false
