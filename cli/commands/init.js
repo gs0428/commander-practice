@@ -1,8 +1,11 @@
-import { Command } from "commander";
-import { z } from "zod";
 import fs from "fs-extra";
 import path from "path";
-import { findPanda } from "../utils/panda.js";
+
+import { Command } from "commander";
+import { z } from "zod";
+import { detect } from "detect-package-manager";
+
+import { findPanda, initPanda } from "../utils/panda.js";
 
 const initOptionsSchema = z.object({
   yes: z.boolean(),
@@ -20,6 +23,7 @@ export const init = new Command()
     try {
       const options = initOptionsSchema.parse(opts);
       const cwd = path.resolve(options.cwd);
+      const packageManager = await detect().then((res) => res);
 
       // 설치하고자 하는 디렉토리 경로가 존재하는지 확인
       if (!fs.existsSync(cwd)) {
@@ -29,7 +33,8 @@ export const init = new Command()
 
       // 판다 설치 여부 확인
       if (!findPanda()) {
-        // 판다 설치 진행
+        // 설치되어 있지 않다면 판다 설치 진행
+        initPanda(cwd, packageManager);
       }
     } catch (err) {
       console.error(err);
